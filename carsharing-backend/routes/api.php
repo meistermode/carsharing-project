@@ -35,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/bookings', [BookingController::class, 'store']);
     Route::post('/bookings/update-status', [BookingController::class, 'updateBookingStatus']);
     Route::get('/cars', [CarController::class, 'index']);
+    Route::get('/cars/status', [CarController::class, 'getStatuses']);
     Route::resource('user', UserController::class)->only(['show', 'update']);
 });
 

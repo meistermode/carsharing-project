@@ -34,7 +34,7 @@ const EXTRA_SERVICES = [
 ];
 
 const BookingModal = ({ isOpen, setIsOpen, car, onBookingSuccess, availableCars }) => {
-  const [step, setStep] = useState('booking'); // 'booking' или 'confirmation'
+  const [step, setStep] = useState('booking'); 
   const [selectedDuration, setSelectedDuration] = useState(durations[0]);
   const [isCustomDuration, setIsCustomDuration] = useState(false);
   const [customDuration, setCustomDuration] = useState({
@@ -111,14 +111,11 @@ const BookingModal = ({ isOpen, setIsOpen, car, onBookingSuccess, availableCars 
     try {
       setIsLoading(true);
       
-      // Получаем текущее время как начало бронирования
       const startTime = new Date();
       
-      // Рассчитываем время окончания бронирования
       const endTime = new Date(startTime);
       endTime.setMinutes(startTime.getMinutes() + calculateTotalMinutes());
 
-      // Подготовка payload для бронирования
       const bookingPayload = {
         car_id: Number(car.id),
         start_time: startTime.toISOString(),
@@ -146,11 +143,9 @@ const BookingModal = ({ isOpen, setIsOpen, car, onBookingSuccess, availableCars 
 
       const data = await response.json();
       
-      // Закрываем модальное окно
       setIsOpen(false);
       setStep('booking');
 
-      // Очищаем форму
       setSelectedDuration(durations[0]);
       setCustomDuration({
         days: '',
@@ -160,13 +155,10 @@ const BookingModal = ({ isOpen, setIsOpen, car, onBookingSuccess, availableCars 
       setIsCustomDuration(false);
       setSelectedExtras([]);
 
-      // Показываем уведомление
       setShowNotification(true);
       setTimeout(() => setShowNotification(false), 3000);
       
-      // Вызываем колбэк для обновления списка автомобилей
       if (onBookingSuccess) {
-        // Передаем правильный ID автомобиля и обновляем его статус
         onBookingSuccess({
           car_id: bookingPayload.car_id,
           ...data
@@ -229,7 +221,6 @@ const BookingModal = ({ isOpen, setIsOpen, car, onBookingSuccess, availableCars 
 
   const renderConfirmation = () => (
     <div className="space-y-6">
-      {/* Информация об автомобиле */}
       <div className="flex space-x-4">
         <div className="flex-shrink-0">
           <img
@@ -281,9 +272,7 @@ const BookingModal = ({ isOpen, setIsOpen, car, onBookingSuccess, availableCars 
         </div>
       </div>
 
-      {/* Детали бронирования */}
       <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-        {/* Длительность */}
         <div className="p-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
@@ -298,7 +287,6 @@ const BookingModal = ({ isOpen, setIsOpen, car, onBookingSuccess, availableCars 
           </div>
         </div>
 
-        {/* Дополнительные услуги */}
         <div className="p-4">
           <div className="flex items-center space-x-2 mb-3">
             <span className="text-gray-400">➕</span>
@@ -339,7 +327,6 @@ const BookingModal = ({ isOpen, setIsOpen, car, onBookingSuccess, availableCars 
         </div>
       </div>
 
-      {/* Итоговая стоимость */}
       <div className="flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-900 rounded-xl">
         <span className="text-lg font-semibold text-gray-900 dark:text-white">
           Итого к оплате
@@ -349,7 +336,6 @@ const BookingModal = ({ isOpen, setIsOpen, car, onBookingSuccess, availableCars 
         </span>
       </div>
 
-      {/* Кнопки */}
       <div className="flex space-x-3">
         <button
           onClick={handleBack}

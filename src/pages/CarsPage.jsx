@@ -5,6 +5,7 @@ import BookingModal from '../components/BookingModal';
 import FilterChips from '../components/FilterChips';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
+import useCarStatusPoller from '../hooks/useCarStatusPoller';
 
 const CarsPage = () => {
   const [cars, setCars] = useState([]);
@@ -16,89 +17,46 @@ const CarsPage = () => {
   const [sortBy, setSortBy] = useState('recommended');
   const [selectedFilters, setSelectedFilters] = useState(['все']);
 
-  // Загрузка данных с сервера
-  useEffect(() => {
-    const fetchCars = async () => {
-      try {
-        setIsLoading(true);
-        const response = await axios.get('http://localhost:8000/api/cars', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        // Преобразуем данные для соответствия ожидаемой структуре
-        const transformedCars = response.data.map(car => {
-          // Декодируем features из юникода, если они представлены в таком формате
-          let decodedFeatures = [];
-          if (car.features) {
-            try {
-              // Пробуем распарсить JSON, если features приходят как строка JSON
-              const parsedFeatures = JSON.parse(car.features);
-              decodedFeatures = Array.isArray(parsedFeatures) ? parsedFeatures : car.features.split(',').map(f => f.trim());
-            } catch {
-              // Если не получилось распарсить JSON, просто разделяем по запятой
-              decodedFeatures = car.features.split(',').map(f => f.trim());
-            }
-          }
+  const setStatusUpdateTimeout = useCarStatusPoller(cars, setCars);
 
-          return {
-            ...car,
-            features: decodedFeatures,
-            rating: car.rating || 4.5,
-            pricePerMinute: car.price_per_minute || car.pricePerMinute,
-            isBooked: car.is_booked || car.isBooked || false,
-            category: car.category || 'Стандарт',
-            image: car.image || '/images/cars/default-car.jpg'
-          };
-        });
-        
-        console.log('Transformed cars:', transformedCars);
-        setCars(transformedCars);
-      } catch (err) {
-        console.error('Error fetching cars:', err);
-        setError('Не удалось загрузить список автомобилей');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const handleBooking = async (carId, startTime, endTime) => {
+    try {
+      const response = await axios.post('http://localhost:8000/api/bookings', {
+        car_id: carId,
+        start_time: startTime,
+        end_time: endTime
+      }, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
 
-    fetchCars();
-  }, []);
+      setStatusUpdateTimeout(carId, endTime);
+      setCars(prevCars =>
+        prevCars.map(car =>
+          car.id === carId
+            ? { ...car, isBooked: true }
+            : car
+        )
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error('Ошибка при бронировании машины:', error);
+      throw error;
+    }
+  };
 
   const handleFilterChange = useCallback((filterId) => {
-    console.log('Filter change triggered:', filterId);
-    console.log('Current selected filters:', selectedFilters);
-
-    if (filterId === 'все') {
-      setSelectedFilters(['все']);
-    } else {
-      // Если сейчас выбрано только 'все', заменяем на новый фильтр
-      if (selectedFilters.length === 1 && selectedFilters[0] === 'все') {
-        setSelectedFilters([filterId]);
-      } else {
-        const newFilters = selectedFilters.filter(f => f !== 'все');
-        
-        // Если фильтр уже выбран, убираем его
-        if (newFilters.includes(filterId)) {
-          const updatedFilters = newFilters.filter(f => f !== filterId);
-          // Если не осталось фильтров, возвращаем 'все'
-          setSelectedFilters(updatedFilters.length === 0 ? ['все'] : updatedFilters);
-        } else {
-          // Добавляем новый фильтр
-          setSelectedFilters([...newFilters, filterId]);
-        }
-      }
-    }
-  }, [selectedFilters]);
+    setSelectedFilters([filterId]);
+  }, []);
 
   const filteredCars = useMemo(() => {
-    // Текстовый поиск
     const matchesSearch = car => 
       car.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       car.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
       car.location.toLowerCase().includes(searchQuery.toLowerCase());
 
-    // Логика фильтрации с учетом комбинаций
     const hasAvailableFilter = selectedFilters.includes('доступные');
     const hasNewFilter = selectedFilters.includes('новые');
     const hasCategoryFilter = 
@@ -106,12 +64,10 @@ const CarsPage = () => {
       selectedFilters.includes('комфорт') || 
       selectedFilters.includes('премиум');
 
-    // Если выбраны только "доступные"
     if (hasAvailableFilter && !hasCategoryFilter && !hasNewFilter) {
       return cars.filter(car => matchesSearch(car) && !car.isBooked);
     }
 
-    // Если выбраны "доступные" и категория
     if (hasAvailableFilter && hasCategoryFilter) {
       const matchesCategory = car => 
         (selectedFilters.includes('эконом') && car.category === 'эконом') ||
@@ -121,7 +77,6 @@ const CarsPage = () => {
       return cars.filter(car => matchesSearch(car) && !car.isBooked && matchesCategory(car));
     }
 
-    // Если выбраны только категории
     if (hasCategoryFilter && !hasAvailableFilter && !hasNewFilter) {
       return cars.filter(car => matchesSearch(car) && (
         (selectedFilters.includes('эконом') && car.category === 'эконом') ||
@@ -130,12 +85,10 @@ const CarsPage = () => {
       ));
     }
 
-    // Если выбраны "новые"
     if (hasNewFilter && !hasCategoryFilter && !hasAvailableFilter) {
       return cars.filter(car => matchesSearch(car) && car.isNew);
     }
 
-    // Если выбраны "новые" и категория
     if (hasNewFilter && hasCategoryFilter) {
       const matchesCategory = car => 
         (selectedFilters.includes('эконом') && car.category === 'эконом') ||
@@ -145,12 +98,10 @@ const CarsPage = () => {
       return cars.filter(car => matchesSearch(car) && car.isNew && matchesCategory(car));
     }
 
-    // Если выбраны "новые" и "доступные"
     if (hasNewFilter && hasAvailableFilter) {
       return cars.filter(car => matchesSearch(car) && car.isNew && !car.isBooked);
     }
 
-    // Если выбраны "новые", "доступные" и категория
     if (hasNewFilter && hasAvailableFilter && hasCategoryFilter) {
       const matchesCategory = car => 
         (selectedFilters.includes('эконом') && car.category === 'эконом') ||
@@ -160,7 +111,6 @@ const CarsPage = () => {
       return cars.filter(car => matchesSearch(car) && car.isNew && !car.isBooked && matchesCategory(car));
     }
 
-    // Если ничего не выбрано или выбрано "все"
     if (selectedFilters.includes('все') || selectedFilters.length === 0) {
       return cars.filter(matchesSearch);
     }
@@ -182,7 +132,6 @@ const CarsPage = () => {
   }, [filteredCars, sortBy]);
 
   const handleBookingSuccess = useCallback((bookingData) => {
-    // Обновляем статус автомобиля в списке
     setCars(prevCars => prevCars.map(car => {
       if (car.id === bookingData.car_id) {
         return {
@@ -192,6 +141,48 @@ const CarsPage = () => {
       }
       return car;
     }));
+  }, []);
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        setIsLoading(true);
+        const response = await axios.get('http://localhost:8000/api/cars', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        const transformedCars = response.data.map(car => {
+          let decodedFeatures = [];
+          if (car.features) {
+            try {
+              const parsedFeatures = JSON.parse(car.features);
+              decodedFeatures = Array.isArray(parsedFeatures) ? parsedFeatures : car.features.split(',').map(f => f.trim());
+            } catch {
+              decodedFeatures = car.features.split(',').map(f => f.trim());
+            }
+          }
+
+          return {
+            ...car,
+            features: decodedFeatures,
+            rating: car.rating || 4.5,
+            pricePerMinute: car.price_per_minute || car.pricePerMinute,
+            isBooked: Boolean(car.is_booked || car.isBooked), 
+            category: car.category || 'Стандарт',
+            image: car.image || '/images/cars/default-car.jpg'
+          };
+        });
+        
+        setCars(transformedCars);
+      } catch (err) {
+        setError('Не удалось загрузить список автомобилей');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCars();
   }, []);
 
   return (
@@ -312,6 +303,7 @@ const CarsPage = () => {
           onClose={() => setIsModalOpen(false)}
           car={selectedCar}
           onBookingSuccess={handleBookingSuccess}
+          onBook={handleBooking}
         />
       )}
     </div>
