@@ -1,11 +1,13 @@
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import CarCard from '../components/CarCard';
 import BookingModal from '../components/BookingModal';
 import FilterChips from '../components/FilterChips';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, UserIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import useCarStatusPoller from '../hooks/useCarStatusPoller';
+import { useAuth } from '../context/AuthContext';
 
 const CarsPage = () => {
   const [cars, setCars] = useState([]);
@@ -17,6 +19,7 @@ const CarsPage = () => {
   const [sortBy, setSortBy] = useState('recommended');
   const [selectedFilters, setSelectedFilters] = useState(['все']);
 
+  const { isAuthenticated } = useAuth();
   const setStatusUpdateTimeout = useCarStatusPoller(cars, setCars);
 
   const handleBooking = async (carId, startTime, endTime) => {
@@ -167,6 +170,11 @@ const CarsPage = () => {
   useEffect(() => {
     const fetchCars = async () => {
       try {
+        if (!isAuthenticated) {
+          setIsLoading(false);
+          return;
+        }
+
         setIsLoading(true);
         const response = await axios.get('http://localhost:8000/api/cars', {
           headers: {
@@ -197,14 +205,53 @@ const CarsPage = () => {
         
         setCars(transformedCars);
       } catch (err) {
-        setError('Не удалось загрузить список автомобилей');
+        if (err.response && err.response.status === 401) {
+          setError(null);
+        } else {
+          setError(err.message);
+        }
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchCars();
-  }, []);
+  }, [isAuthenticated]);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200 flex items-center justify-center p-4">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+          className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-md w-full text-center"
+        >
+          <UserIcon className="mx-auto h-16 w-16 text-indigo-500 dark:text-indigo-400 mb-4" />
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            Войдите, чтобы забронировать автомобиль
+          </h2>
+          <p className="text-gray-600 dark:text-gray-300 mb-6">
+            Для просмотра и бронирования автомобилей необходимо авторизоваться или зарегистрироваться
+          </p>
+          <div className="flex justify-center space-x-4">
+            <Link 
+              to="/login" 
+              className="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors"
+            >
+              Войти
+            </Link>
+            <Link 
+              to="/register" 
+              className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+            >
+              Регистрация
+            </Link>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-2 sm:p-4">

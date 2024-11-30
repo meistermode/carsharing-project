@@ -1,172 +1,243 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { 
+  MapPinIcon, 
+  PhoneIcon, 
+  EnvelopeIcon,
+  ClockIcon,
+  BanknotesIcon,
+  ShieldCheckIcon,
+  SparklesIcon,
+  UserGroupIcon,
+  WrenchIcon
+} from '@heroicons/react/24/outline';
 
-const About = () => {
-  const features = [
-    {
-      title: 'Простая регистрация',
-      description: 'Зарегистрируйтесь через приложение за пару минут',
-      icon: 'https://api.iconify.design/heroicons:user-plus-20-solid.svg',
-    },
-    {
-      title: 'Выбор автомобиля',
-      description: 'Выберите подходящий автомобиль из нашего автопарка',
-      icon: 'https://api.iconify.design/heroicons:truck-20-solid.svg',
-    },
-    {
-      title: 'Бронирование',
-      description: 'Забронируйте автомобиль на удобное время',
-      icon: 'https://api.iconify.design/heroicons:calendar-20-solid.svg',
-    },
-    {
-      title: 'Начало поездки',
-      description: 'Откройте автомобиль с помощью приложения и начните поездку',
-      icon: 'https://api.iconify.design/heroicons:key-20-solid.svg',
-    },
-  ];
+const CompanyStory = () => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-8"
+    >
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <div>
+          <h2 className="text-3xl font-bold text-indigo-900 dark:text-indigo-200 mb-4">
+            Первый каршеринг в Соликамске
+          </h2>
+          <div className="space-y-4 text-gray-600 dark:text-gray-300">
+            <p>
+              Мы запустили первый сервис каршеринга в Соликамске в 2023 году. Наша миссия - 
+              сделать передвижение по городу доступным и комфортным для каждого жителя.
+            </p>
+            <p>
+              В нашем автопарке представлены популярные модели автомобилей в отличном состоянии. 
+              Все машины регулярно проходят техническое обслуживание и оснащены современными 
+              системами безопасности.
+            </p>
+            <p>
+              Мы стремимся развивать транспортную инфраструктуру города и делать жизнь 
+              соликамцев более комфортной и мобильной.
+            </p>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="bg-indigo-50 dark:bg-indigo-900/20 p-6 rounded-xl text-center">
+            <div className="text-3xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">14</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">Автомобилей</div>
+          </div>
+          <div className="bg-indigo-50 dark:bg-indigo-900/20 p-6 rounded-xl text-center">
+            <div className="text-3xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">1000+</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">Поездок</div>
+          </div>
+          <div className="bg-indigo-50 dark:bg-indigo-900/20 p-6 rounded-xl text-center">
+            <div className="text-3xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">4.8</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">Рейтинг</div>
+          </div>
+          <div className="bg-indigo-50 dark:bg-indigo-900/20 p-6 rounded-xl text-center">
+            <div className="text-3xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">24/7</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">Поддержка</div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
 
-  const benefits = [
+const ServiceAdvantages = () => {
+  const advantages = [
     {
-      title: 'Доступные цены',
-      description: 'Выгодные тарифы для поездок любой длительности',
+      icon: ClockIcon,
+      title: 'Круглосуточная доступность',
+      description: 'Автомобили доступны для аренды в любое время дня и ночи'
     },
     {
-      title: 'Страховка включена',
-      description: 'Все автомобили застрахованы по ОСАГО и КАСКО',
+      icon: BanknotesIcon,
+      title: 'Выгодные тарифы',
+      description: 'Прозрачное ценообразование и доступные цены для всех'
     },
     {
-      title: 'Поддержка 24/7',
-      description: 'Служба поддержки всегда на связи',
+      icon: ShieldCheckIcon,
+      title: 'Полная страховка',
+      description: 'Все автомобили застрахованы по ОСАГО и КАСКО'
     },
     {
-      title: 'Бесплатная парковка',
-      description: 'Бесплатная парковка на городских парковках',
+      icon: SparklesIcon,
+      title: 'Чистые автомобили',
+      description: 'Регулярная мойка и уборка салона каждого автомобиля'
+    },
+    {
+      icon: UserGroupIcon,
+      title: 'Поддержка клиентов',
+      description: 'Оперативная помощь в любой ситуации 24/7'
+    },
+    {
+      icon: WrenchIcon,
+      title: 'Техобслуживание',
+      description: 'Регулярное ТО и контроль состояния автомобилей'
     }
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-      {/* Hero Section */}
-      <div className="relative py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl"
-            >
-              Каршеринг в Соликамске
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="mx-auto mt-6 max-w-2xl text-lg text-gray-600 dark:text-gray-300"
-            >
-              Мы делаем передвижение по городу удобным и доступным. 
-              Арендуйте автомобиль в любое время суток и отправляйтесь куда угодно.
-            </motion.p>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-8"
+    >
+      <h2 className="text-3xl font-bold text-indigo-900 dark:text-indigo-200 mb-8 text-center">
+        Преимущества сервиса
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {advantages.map((advantage, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className="bg-indigo-50 dark:bg-indigo-900/20 p-6 rounded-xl"
+          >
+            <advantage.icon className="h-8 w-8 text-indigo-600 dark:text-indigo-400 mb-4" />
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              {advantage.title}
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300">
+              {advantage.description}
+            </p>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  );
+};
+
+const OurMission = () => {
+  const values = [
+    {
+      title: 'Доступность',
+      description: 'Делаем каршеринг доступным для всех жителей Соликамска с понятными тарифами и простыми условиями'
+    },
+    {
+      title: 'Надежность',
+      description: 'Все автомобили проходят регулярное ТО и содержатся в идеальном состоянии'
+    },
+    {
+      title: 'Комфорт',
+      description: 'Современные автомобили с полным набором необходимых опций для комфортных поездок'
+    },
+    {
+      title: 'Забота',
+      description: 'Оперативная поддержка и помощь в любой ситуации для наших клиентов'
+    }
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+      className="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-8"
+    >
+      <h2 className="text-3xl font-bold text-indigo-900 dark:text-indigo-200 mb-8 text-center">
+        Наши Принципы
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {values.map((value, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: index * 0.1 }}
+            className="bg-indigo-50 dark:bg-indigo-900/20 p-6 rounded-xl"
+          >
+            <h3 className="text-xl font-bold text-indigo-900 dark:text-indigo-200 mb-2">
+              {value.title}
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300">
+              {value.description}
+            </p>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  );
+};
+
+const ContactInfo = () => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.4 }}
+      className="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-8"
+    >
+      <h2 className="text-3xl font-bold text-indigo-900 dark:text-indigo-200 mb-8 text-center">
+        Свяжитесь с Нами
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="flex items-center space-x-4 p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl">
+          <MapPinIcon className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+          <div>
+            <h3 className="font-semibold text-indigo-900 dark:text-indigo-200">Адрес</h3>
+            <p className="text-gray-600 dark:text-gray-300">ул. 20-летия Победы, 173Б</p>
+          </div>
+        </div>
+        <div className="flex items-center space-x-4 p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl">
+          <PhoneIcon className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+          <div>
+            <h3 className="font-semibold text-indigo-900 dark:text-indigo-200">Телефон</h3>
+            <p className="text-gray-600 dark:text-gray-300">+7 (919) 714-77-77</p>
+          </div>
+        </div>
+        <div className="flex items-center space-x-4 p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl">
+          <EnvelopeIcon className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+          <div>
+            <h3 className="font-semibold text-indigo-900 dark:text-indigo-200">Email</h3>
+            <p className="text-gray-600 dark:text-gray-300">info@carsharing-solikamsk.ru</p>
           </div>
         </div>
       </div>
+    </motion.div>
+  );
+};
 
-      {/* Features Section */}
-      <div className="py-16 bg-white dark:bg-gray-800">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {features.map((feature, index) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="relative"
-              >
-                <div className="rounded-2xl bg-gray-50 dark:bg-gray-700 p-6 h-full">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-600 dark:bg-indigo-500">
-                    <img 
-                      src={feature.icon}
-                      className="h-6 w-6"
-                      alt=""
-                      style={{ filter: 'brightness(0) invert(1)' }}
-                    />
-                  </div>
-                  <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
-                    {feature.title}
-                  </h3>
-                  <p className="mt-2 text-gray-600 dark:text-gray-300">
-                    {feature.description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+const About = () => {
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto space-y-12">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-extrabold text-indigo-900 dark:text-indigo-200 mb-4">
+            О Нашем Сервисе
+          </h1>
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Первый сервис каршеринга в Соликамске
+          </p>
         </div>
-      </div>
 
-      {/* Benefits Section */}
-      <div className="py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Преимущества нашего сервиса
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {benefits.map((benefit, index) => (
-              <motion.div
-                key={benefit.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="relative"
-              >
-                <div className="rounded-2xl border border-gray-200 dark:border-gray-700 p-6 h-full">
-                  <div className="absolute -top-3 left-6 px-4 py-1 bg-indigo-600 dark:bg-indigo-500 rounded-full">
-                    <span className="text-sm font-medium text-white">#{index + 1}</span>
-                  </div>
-                  <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
-                    {benefit.title}
-                  </h3>
-                  <p className="mt-2 text-gray-600 dark:text-gray-300">
-                    {benefit.description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* CTA Section */}
-      <div className="py-16 bg-white dark:bg-gray-800">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="relative rounded-2xl bg-indigo-600 dark:bg-indigo-500 px-6 py-10 sm:px-12 sm:py-16">
-            <div className="relative mx-auto max-w-3xl text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                Готовы начать?
-              </h2>
-              <p className="mx-auto mt-6 max-w-xl text-lg text-indigo-50">
-                Присоединяйтесь к нашему сервису каршеринга прямо сейчас и получите доступ к автопарку в Соликамске
-              </p>
-              <div className="mt-8 flex justify-center gap-4">
-                <Link
-                  to="/cars"
-                  className="rounded-lg bg-white px-6 py-3 text-base font-medium text-indigo-600 hover:bg-indigo-50 transition-colors duration-200"
-                >
-                  Выбрать автомобиль
-                </Link>
-                <Link
-                  to="/tariffs"
-                  className="rounded-lg bg-indigo-500 dark:bg-indigo-400 px-6 py-3 text-base font-medium text-white hover:bg-indigo-400 dark:hover:bg-indigo-300 transition-colors duration-200"
-                >
-                  Посмотреть тарифы
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
+        <CompanyStory />
+        <ServiceAdvantages />
+        <OurMission />
+        <ContactInfo />
       </div>
     </div>
   );
