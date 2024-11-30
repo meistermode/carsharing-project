@@ -48,7 +48,26 @@ const CarsPage = () => {
   };
 
   const handleFilterChange = useCallback((filterId) => {
-    setSelectedFilters([filterId]);
+    setSelectedFilters(prev => {
+      // If "все" (all) is selected, clear other filters
+      if (filterId === 'все') {
+        return ['все'];
+      }
+      
+      // If selecting a new filter while "все" is active, remove "все" and add the new filter
+      if (prev.includes('все')) {
+        return [filterId];
+      }
+
+      // Toggle the selected filter
+      if (prev.includes(filterId)) {
+        const newFilters = prev.filter(f => f !== filterId);
+        // If no filters remain, default to "все"
+        return newFilters.length === 0 ? ['все'] : newFilters;
+      } else {
+        return [...prev, filterId];
+      }
+    });
   }, []);
 
   const filteredCars = useMemo(() => {
@@ -121,13 +140,15 @@ const CarsPage = () => {
   const sortedCars = useMemo(() => {
     switch (sortBy) {
       case 'price-asc':
-        return filteredCars.sort((a, b) => a.pricePerMinute - b.pricePerMinute);
+        return [...filteredCars].sort((a, b) => a.pricePerMinute - b.pricePerMinute);
       case 'price-desc':
-        return filteredCars.sort((a, b) => b.pricePerMinute - a.pricePerMinute);
+        return [...filteredCars].sort((a, b) => b.pricePerMinute - a.pricePerMinute);
       case 'rating':
-        return filteredCars.sort((a, b) => b.rating - a.rating);
+        return [...filteredCars].sort((a, b) => b.rating - a.rating);
+      case 'recommended':
       default:
-        return filteredCars;
+        // Ensure we return a new array to trigger re-render
+        return [...filteredCars];
     }
   }, [filteredCars, sortBy]);
 
