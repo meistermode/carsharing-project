@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="100" cy="100" r="95" fill="#6366f1" opacity="0.1"/>
+  
+  <!-- Car Body -->
+  <path d="M30 130
+           L40 110
+           C45 105 55 100 60 100
+           L75 90
+           C85 85 115 85 125 90
+           L140 100
+           C145 100 155 105 160 110
+           L170 130
+           Q175 135 175 140
+           L175 150
+           Q175 155 170 155
+           L160 155
+           C160 140 145 140 145 155
+           L75 155
+           C75 140 60 140 60 155
+           L50 155
+           Q45 155 45 150
+           L45 140
+           Q45 135 50 130
+           Z" 
+        fill="#6366f1"/>
+  
+  <!-- Windows -->
+  <path d="M75 100
+           L85 92
+           L135 92
+           L145 100
+           L135 100
+           L125 95
+           L95 95
+           L85 100
+           Z" 
+        fill="#1f2937"/>
+  
+  <!-- Wheels -->
+  <circle cx="65" cy="155" r="15" fill="#1f2937"/>
+  <circle cx="155" cy="155" r="15" fill="#1f2937"/>
+  
+  <!-- Wheel Details -->
+  <circle cx="65" cy="155" r="8" fill="#4b5563"/>
+  <circle cx="155" cy="155" r="8" fill="#4b5563"/>
+  
+  <!-- Headlights -->
+  <path d="M160 115
+           L165 115
+           Q170 120 170 125
+           L165 125
+           Q160 120 160 115
+           Z" 
+        fill="#fde68a"/>
+  
+  <!-- Taillights -->
+  <path d="M40 115
+           L45 115
+           Q50 120 50 125
+           L45 125
+           Q40 120 40 115
+           Z" 
+        fill="#ef4444"/>
+        
+  <!-- Sharing Nodes -->
+  <circle cx="40" cy="60" r="6" fill="#6366f1" opacity="0.6"/>
+  <circle cx="100" cy="40" r="6" fill="#6366f1" opacity="0.6"/>
+  <circle cx="160" cy="60" r="6" fill="#6366f1" opacity="0.6"/>
+  
+  <!-- Connecting Lines -->
+  <line x1="40" y1="60" x2="100" y2="40" stroke="#6366f1" stroke-width="2" stroke-dasharray="4,4"/>
+  <line x1="100" y1="40" x2="160" y2="60" stroke="#6366f1" stroke-width="2" stroke-dasharray="4,4"/>
+</svg>
