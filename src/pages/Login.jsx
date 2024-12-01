@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
 import { FaEnvelope, FaLock, FaSignInAlt } from 'react-icons/fa';
+import '../styles/auth-forms.css';
+import AnimatedCircles from '../components/AnimatedCircles';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -40,37 +42,31 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 py-8 transition-colors duration-200">
+        <div className="min-h-screen flex items-center justify-center bg-transparent px-4 py-8 transition-colors duration-200">
+            <AnimatedCircles />
             <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
-                className="max-w-md w-full space-y-8 p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700"
+                className="max-w-md w-full space-y-8 p-8 glass-container"
             >
                 <div className="text-center">
-                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                        Вход в систему
-                    </h2>
-                    <p className="text-gray-500 dark:text-gray-400">
-                        Введите ваши учетные данные
-                    </p>
+                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Вход</h2>
+                    <p className="text-gray-600 dark:text-gray-300">Войдите в свой аккаунт</p>
                 </div>
-
+                
                 {error && (
-                    <motion.div 
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded-lg text-center"
-                    >
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                         {error}
-                    </motion.div>
+                    </div>
                 )}
 
-                <form className="space-y-6" onSubmit={handleLogin}>
-                    <div className="space-y-4">
+                <form onSubmit={handleLogin} className="space-y-6">
+                    <div>
+                        <label htmlFor="email" className="sr-only">Email</label>
                         <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <FaEnvelope className="text-gray-400 dark:text-gray-500" />
+                            <div className="icon-container">
+                                <FaEnvelope className="input-icon" />
                             </div>
                             <input
                                 id="email"
@@ -79,13 +75,17 @@ const Login = () => {
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="pl-10 block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
+                                className="glass-input w-full pl-10 pr-3 py-2 text-sm"
                                 placeholder="Email"
                             />
                         </div>
+                    </div>
+
+                    <div>
+                        <label htmlFor="password" className="sr-only">Пароль</label>
                         <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <FaLock className="text-gray-400 dark:text-gray-500" />
+                            <div className="icon-container">
+                                <FaLock className="input-icon" />
                             </div>
                             <input
                                 id="password"
@@ -94,9 +94,29 @@ const Login = () => {
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="pl-10 block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
+                                className="glass-input w-full pl-10 pr-3 py-2 text-sm"
                                 placeholder="Пароль"
                             />
+                        </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                            <input
+                                id="remember-me"
+                                name="remember-me"
+                                type="checkbox"
+                                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                            />
+                            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900 dark:text-white">
+                                Запомнить меня
+                            </label>
+                        </div>
+
+                        <div className="text-sm">
+                            <Link to="/forgot-password" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
+                                Забыли пароль?
+                            </Link>
                         </div>
                     </div>
 
@@ -104,24 +124,26 @@ const Login = () => {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 ease-in-out"
+                            className="glass-button w-full flex justify-center py-2 px-4 text-sm font-medium"
                         >
-                            {isLoading ? 'Вход...' : 'Войти'}
+                            {isLoading ? 'Загрузка...' : (
+                                <>
+                                    <FaSignInAlt className="mr-2 my-auto" />
+                                    Войти
+                                </>
+                            )}
                         </button>
                     </div>
-                </form>
 
-                <div className="text-center">
-                    <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-                        Нет аккаунта?{' '}
-                        <Link 
-                            to="/register" 
-                            className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 transition-colors"
-                        >
-                            Зарегистрируйтесь
-                        </Link>
-                    </p>
-                </div>
+                    <div className="text-center">
+                        <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                            Нет аккаунта? {' '}
+                            <Link to="/register" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
+                                Зарегистрируйтесь
+                            </Link>
+                        </p>
+                    </div>
+                </form>
             </motion.div>
         </div>
     );

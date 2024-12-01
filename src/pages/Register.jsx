@@ -8,6 +8,8 @@ import {
     FaLock, 
     FaUserPlus 
 } from 'react-icons/fa';
+import '../styles/auth-forms.css';
+import AnimatedCircles from '../components/AnimatedCircles';
 
 const Register = () => {
     const [firstName, setFirstName] = useState('');
@@ -59,38 +61,32 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 py-8 transition-colors duration-200">
+        <div className="min-h-screen flex items-center justify-center bg-transparent px-4 py-8 transition-colors duration-200">
+            <AnimatedCircles />
             <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
-                className="max-w-md w-full space-y-8 p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700"
+                className="max-w-md w-full space-y-8 p-8 glass-container"
             >
                 <div className="text-center">
-                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                        Регистрация
-                    </h2>
-                    <p className="text-gray-500 dark:text-gray-400">
-                        Создайте ваш аккаунт
-                    </p>
+                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Регистрация</h2>
+                    <p className="text-gray-600 dark:text-gray-300">Создайте свой аккаунт</p>
                 </div>
-
+                
                 {error && (
-                    <motion.div 
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded-lg text-center"
-                    >
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                         {error}
-                    </motion.div>
+                    </div>
                 )}
 
-                <form className="space-y-6" onSubmit={handleRegister}>
-                    <div className="space-y-4">
-                        <div className="flex space-x-4">
-                            <div className="relative w-1/2">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <FaUser className="text-gray-400 dark:text-gray-500" />
+                <form onSubmit={handleRegister} className="space-y-6">
+                    <div className="flex space-x-4">
+                        <div className="w-1/2">
+                            <label htmlFor="firstName" className="sr-only">Имя</label>
+                            <div className="relative">
+                                <div className="icon-container">
+                                    <FaUser className="input-icon" />
                                 </div>
                                 <input
                                     id="firstName"
@@ -99,13 +95,16 @@ const Register = () => {
                                     required
                                     value={firstName}
                                     onChange={(e) => setFirstName(e.target.value)}
-                                    className="pl-10 block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
+                                    className="glass-input w-full pl-10 pr-3 py-2 text-sm"
                                     placeholder="Имя"
                                 />
                             </div>
-                            <div className="relative w-1/2">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <FaUser className="text-gray-400 dark:text-gray-500" />
+                        </div>
+                        <div className="w-1/2">
+                            <label htmlFor="lastName" className="sr-only">Фамилия</label>
+                            <div className="relative">
+                                <div className="icon-container">
+                                    <FaUser className="input-icon" />
                                 </div>
                                 <input
                                     id="lastName"
@@ -114,15 +113,18 @@ const Register = () => {
                                     required
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
-                                    className="pl-10 block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
+                                    className="glass-input w-full pl-10 pr-3 py-2 text-sm"
                                     placeholder="Фамилия"
                                 />
                             </div>
                         </div>
+                    </div>
 
+                    <div>
+                        <label htmlFor="email" className="sr-only">Email</label>
                         <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <FaEnvelope className="text-gray-400 dark:text-gray-500" />
+                            <div className="icon-container">
+                                <FaEnvelope className="input-icon" />
                             </div>
                             <input
                                 id="email"
@@ -131,14 +133,17 @@ const Register = () => {
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="pl-10 block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
+                                className="glass-input w-full pl-10 pr-3 py-2 text-sm"
                                 placeholder="Email"
                             />
                         </div>
+                    </div>
 
+                    <div>
+                        <label htmlFor="password" className="sr-only">Пароль</label>
                         <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <FaLock className="text-gray-400 dark:text-gray-500" />
+                            <div className="icon-container">
+                                <FaLock className="input-icon" />
                             </div>
                             <input
                                 id="password"
@@ -147,14 +152,17 @@ const Register = () => {
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="pl-10 block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
+                                className="glass-input w-full pl-10 pr-3 py-2 text-sm"
                                 placeholder="Пароль"
                             />
                         </div>
+                    </div>
 
+                    <div>
+                        <label htmlFor="passwordConfirmation" className="sr-only">Подтверждение пароля</label>
                         <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <FaLock className="text-gray-400 dark:text-gray-500" />
+                            <div className="icon-container">
+                                <FaLock className="input-icon" />
                             </div>
                             <input
                                 id="passwordConfirmation"
@@ -163,7 +171,7 @@ const Register = () => {
                                 required
                                 value={passwordConfirmation}
                                 onChange={(e) => setPasswordConfirmation(e.target.value)}
-                                className="pl-10 block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
+                                className="glass-input w-full pl-10 pr-3 py-2 text-sm"
                                 placeholder="Подтвердите пароль"
                             />
                         </div>
@@ -173,24 +181,26 @@ const Register = () => {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 ease-in-out"
+                            className="glass-button w-full flex justify-center py-2 px-4 text-sm font-medium"
                         >
-                            {isLoading ? 'Регистрация...' : 'Зарегистрироваться'}
+                            {isLoading ? 'Загрузка...' : (
+                                <>
+                                    <FaUserPlus className="mr-2 my-auto" />
+                                    Зарегистрироваться
+                                </>
+                            )}
                         </button>
                     </div>
-                </form>
 
-                <div className="text-center">
-                    <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-                        Уже есть аккаунт?{' '}
-                        <Link 
-                            to="/login" 
-                            className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 transition-colors"
-                        >
-                            Войдите
-                        </Link>
-                    </p>
-                </div>
+                    <div className="text-center">
+                        <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                            Уже есть аккаунт? {' '}
+                            <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
+                                Войдите
+                            </Link>
+                        </p>
+                    </div>
+                </form>
             </motion.div>
         </div>
     );
