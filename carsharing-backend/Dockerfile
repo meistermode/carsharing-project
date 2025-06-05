@@ -24,11 +24,11 @@ WORKDIR /var/www/html
 # Copy application code
 COPY . .
 
+# Create .env file from .env.example if it doesn't exist
+RUN cp .env.example .env || true
+
 # Install Composer dependencies
 RUN composer install --no-dev --optimize-autoloader
-
-# Generate application key
-RUN php artisan key:generate --force
 
 # Set permissions for storage and bootstrap/cache
 RUN chown -R www-data:www-data storage bootstrap/cache
